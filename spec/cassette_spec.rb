@@ -105,6 +105,20 @@ describe VCR::Cassette do
     end
   end
 
+  describe '#match_requests_on' do
+    before(:each) { VCR::Config.default_cassette_options.merge!(:match_requests_on => [:uri, :method]) }
+
+    it "returns the provided options" do
+      c = VCR::Cassette.new('example', :match_requests_on => [:uri])
+      c.match_requests_on.should == [:uri]
+    end
+
+    it "returns a the default #match_requests_on when it has not been specified for the cassette" do
+      c = VCR::Cassette.new('example')
+      c.match_requests_on.should == [:uri, :method]
+    end
+  end
+
   describe '#allow_real_http_requests_to?' do
     it 'delegates to the :allow_real_http lambda' do
       [true, false].each do |value|

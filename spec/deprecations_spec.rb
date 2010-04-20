@@ -53,7 +53,8 @@ describe 'Deprecations' do
       it 'merges the :record option with the existing default_cassette_record options' do
         VCR::Config.default_cassette_options = { :an => :option }
         VCR::Config.default_cassette_record_mode = :all
-        VCR::Config.default_cassette_options.should == { :an => :option, :record => :all }
+        VCR::Config.default_cassette_options[:an].should == :option
+        VCR::Config.default_cassette_options[:record].should == :all
       end
 
       it 'warns the user that it is deprecated' do

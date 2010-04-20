@@ -5,11 +5,12 @@ module VCR
   class Cassette
     VALID_RECORD_MODES = [:all, :none, :new_episodes].freeze
 
-    attr_reader :name, :record_mode
+    attr_reader :name, :record_mode, :match_requests_on
 
     def initialize(name, options = {})
       @name = name
       @record_mode = options[:record] || VCR::Config.default_cassette_options[:record]
+      @match_requests_on = options[:match_requests_on] || VCR::Config.default_cassette_options[:match_requests_on]
       @allow_real_http_lambda = allow_real_http_lambda_for(options[:allow_real_http] || VCR::Config.default_cassette_options[:allow_real_http])
 
       deprecate_unregistered_record_mode

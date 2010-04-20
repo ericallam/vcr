@@ -1,6 +1,18 @@
 require 'spec_helper'
 
 describe VCR::Request do
+  describe '#matcher' do
+    it 'returns a matcher with the given request' do
+      req = VCR::Request.new
+      req.matcher([:uri]).request.should == req
+    end
+
+    it 'returns a matcher with the given match_requests_on' do
+      req = VCR::Request.new
+      req.matcher([:uri, :headers]).match_requests_on.should == [:uri, :headers]
+    end
+  end
+
   describe '.from_net_http_request' do
     let(:net_http) { YAML.load(File.read(File.dirname(__FILE__) + "/fixtures/#{RUBY_VERSION}/example_net_http.yml")) }
     let(:request)  { YAML.load(File.read(File.dirname(__FILE__) + "/fixtures/#{RUBY_VERSION}/example_net_http_request.yml")) }

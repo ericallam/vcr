@@ -10,6 +10,10 @@ module VCR
         request.to_hash
       )
     end
+
+    def matcher(match_requests_on)
+      RequestMatcher.new(self, match_requests_on)
+    end
   end
 
   class ResponseStatus < Struct.new(:code, :message)
