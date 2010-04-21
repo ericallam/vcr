@@ -43,8 +43,8 @@ module VCR
           ::WebMock::RequestRegistry.instance.request_stubs = checkpoints.delete(checkpoint_name)
         end
 
-        def request_stubbed?(method, uri)
-          !!::WebMock.registered_request?(::WebMock::RequestSignature.new(method, uri))
+        def request_stubbed?(request_matcher)
+          !!::WebMock.registered_request?(::WebMock::RequestSignature.new(request_matcher.method, request_matcher.uri))
         end
 
         def request_uri(net_http, request)

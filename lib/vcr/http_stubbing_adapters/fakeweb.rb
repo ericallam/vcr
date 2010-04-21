@@ -39,8 +39,8 @@ module VCR
           ::FakeWeb::Registry.instance.uri_map = checkpoints.delete(checkpoint_name)
         end
 
-        def request_stubbed?(method, uri)
-          ::FakeWeb.registered_uri?(method, uri)
+        def request_stubbed?(request_matcher)
+          ::FakeWeb.registered_uri?(request_matcher.method, request_matcher.uri)
         end
 
         def request_uri(net_http, request)

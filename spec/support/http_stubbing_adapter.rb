@@ -22,6 +22,10 @@ shared_examples_for "an http stubbing adapter" do
     end
   end
 
+  def req_stubbed?(match_requests_on, *args)
+    subject.request_stubbed?(VCR::RequestMatcher.new(VCR::Request.new(*args), match_requests_on))
+  end
+
   [true, false].each do |http_allowed|
     context "when #http_connections_allowed is set to #{http_allowed}" do
       before(:each) { subject.http_connections_allowed = http_allowed }
@@ -40,13 +44,13 @@ shared_examples_for "an http stubbing adapter" do
         end
 
         it 'returns true from #request_stubbed? for the requests that are stubbed' do
-          subject.request_stubbed?(:post, 'http://example.com').should be_true
-          subject.request_stubbed?(:get, 'http://example.com/foo').should be_true
+          req_stubbed?([:method, :uri], :post, 'http://example.com').should be_true
+          req_stubbed?([:method, :uri], :get, 'http://example.com/foo').should be_true
         end
 
         it 'returns false from #request_stubbed? for requests that are not stubbed' do
-          subject.request_stubbed?(:post, 'http://example.com/foo').should be_false
-          subject.request_stubbed?(:get, 'http://google.com').should be_false
+          req_stubbed?([:method, :uri], :post, 'http://example.com/foo').should be_false
+          req_stubbed?([:method, :uri], :get, 'http://google.com').should be_false
         end
 
         it 'gets the stubbed responses when multple post requests are made to http://example.com' do
@@ -64,9 +68,9 @@ shared_examples_for "an http stubbing adapter" do
           test_real_http_request(http_allowed)
 
           it 'returns false from #request_stubbed?' do
-            subject.request_stubbed?(:get, 'http://example.com/foo').should be_false
-            subject.request_stubbed?(:post, 'http://example.com').should be_false
-            subject.request_stubbed?(:get, 'http://google.com').should be_false
+            req_stubbed?([:method, :uri], :get, 'http://example.com/foo').should be_false
+            req_stubbed?([:method, :uri], :post, 'http://example.com').should be_false
+            req_stubbed?([:method, :uri], :get, 'http://google.com').should be_false
           end
         end
       end
